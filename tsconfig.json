@@ -15,7 +15,7 @@
     "outDir": "./dist/esm",
     "isolatedModules": true,
     "declaration": true,
-    "skipLibCheck": true // Fixes WeakMap identical type parameter bugs on build
+    "skipLibCheck": true // Fixes WeakMap identical type parameter bugs on
   },
   "typedocOptions": {
     "entryPoints": ["./src/index.ts"],

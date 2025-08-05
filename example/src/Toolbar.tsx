@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import "./style/Toolbar.css";
 
@@ -38,14 +38,24 @@ const Toolbar = ({ setPdfScaleValue, toggleHighlightPen }: ToolbarProps) => {
   return (
     <div className="Toolbar">
       <div className="ZoomControls">
-        <button title="Zoom in" onClick={zoomIn}>+</button>
-        <button title="Zoom out" onClick={zoomOut}>-</button>
+        <button title="Zoom in" onClick={zoomIn}>
+          +
+        </button>
+        <button title="Zoom out" onClick={zoomOut}>
+          -
+        </button>
         {zoom ? `${(zoom * 100).toFixed(0)}%` : "Auto"}
       </div>
-      <button title="Highlight" className={`HighlightButton ${isHighlightPen ? 'active' : ''}`} onClick={() => {
-        toggleHighlightPen();
-        setIsHighlightPen(!isHighlightPen);
-      }}>Toggle Highlights</button>
+      <button
+        title="Highlight"
+        className={`HighlightButton ${isHighlightPen ? "active" : ""}`}
+        onClick={() => {
+          toggleHighlightPen();
+          setIsHighlightPen(!isHighlightPen);
+        }}
+      >
+        Toggle Highlights
+      </button>
     </div>
   );
 };

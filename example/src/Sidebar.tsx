@@ -1,7 +1,6 @@
-import React from "react";
 import type { Highlight } from "./react-pdf-highlighter-extended";
 import "./style/Sidebar.css";
-import { CommentedHighlight } from "./types";
+import type { CommentedHighlight } from "./types";
 
 interface SidebarProps {
   highlights: Array<CommentedHighlight>;
@@ -13,8 +12,6 @@ const updateHash = (highlight: Highlight) => {
   document.location.hash = `highlight-${highlight.id}`;
 };
 
-declare const APP_VERSION: string;
-
 const Sidebar = ({
   highlights,
   toggleDocument,
@@ -23,24 +20,6 @@ const Sidebar = ({
   return (
     <div className="sidebar" style={{ width: "25vw", maxWidth: "500px" }}>
       {/* Description section */}
-      <div className="description" style={{ padding: "1rem" }}>
-        <h2 style={{ marginBottom: "1rem" }}>
-          react-pdf-highlighter-extended {APP_VERSION}
-        </h2>
-
-        <p style={{ fontSize: "0.7rem" }}>
-          <a href="https://github.com/DanielArnould/react-pdf-highlighter-extended">
-            Open in GitHub
-          </a>
-        </p>
-
-        <p>
-          <small>
-            To create an area highlight hold ⌥ Option key (Alt), then click and
-            drag.
-          </small>
-        </p>
-      </div>
 
       {/* Highlights list */}
       {highlights && (
