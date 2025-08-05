@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+} from "react";
 import CommentForm from "./CommentForm";
 import ContextMenu, { type ContextMenuProps } from "./ContextMenu";
 import ExpandableTip from "./ExpandableTip";
@@ -112,10 +118,6 @@ const App = () => {
     setHighlights([]);
   };
 
-  const getHighlightById = (id: string) => {
-    return highlights.find((highlight) => highlight.id === id);
-  };
-
   // Open comment tip and update highlight with new user input
   const editComment = (highlight: ViewportHighlight<CommentedHighlight>) => {
     if (!highlighterUtilsRef.current) return;
@@ -138,23 +140,29 @@ const App = () => {
     highlighterUtilsRef.current.toggleEditInProgress(true);
   };
 
-  // Scroll to highlight based on hash in the URL
-  const scrollToHighlightFromHash = () => {
-    const highlight = getHighlightById(parseIdFromHash());
-
-    if (highlight && highlighterUtilsRef.current) {
-      highlighterUtilsRef.current.scrollToHighlight(highlight);
-    }
-  };
+  const getHighlightById = useCallback(
+    (id: string) => {
+      return highlights.find((highlight) => highlight.id === id);
+    },
+    [highlights]
+  );
 
   // Hash listeners for autoscrolling to highlights
   useEffect(() => {
+    const scrollToHighlightFromHash = () => {
+      const highlight = getHighlightById(parseIdFromHash());
+
+      if (highlight && highlighterUtilsRef.current) {
+        highlighterUtilsRef.current.scrollToHighlight(highlight);
+      }
+    };
+
     window.addEventListener("hashchange", scrollToHighlightFromHash);
 
     return () => {
       window.removeEventListener("hashchange", scrollToHighlightFromHash);
     };
-  }, [scrollToHighlightFromHash]);
+  }, [getHighlightById]);
 
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>
