@@ -16,6 +16,7 @@ import {
   PdfLoader,
   type GhostHighlight,
   type PdfHighlighterUtils,
+  type PdfScaleValue,
   type Tip,
   type ViewportHighlight,
 } from "./react-pdf-highlighter-extended";
@@ -44,7 +45,7 @@ const App = () => {
   );
   const currentPdfIndexRef = useRef(0);
   const [contextMenu, setContextMenu] = useState<ContextMenuProps | null>(null);
-  const [pdfScaleValue, setPdfScaleValue] = useState<number | undefined>(
+  const [pdfScaleValue, setPdfScaleValue] = useState<PdfScaleValue | undefined>(
     undefined
   );
   const [highlightPen, setHighlightPen] = useState<boolean>(false);

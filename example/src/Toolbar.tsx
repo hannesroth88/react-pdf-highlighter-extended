@@ -22,9 +22,17 @@ import {
 import { Button } from "./components/ui/button";
 import { Separator } from "./components/ui/separator";
 import { Input } from "./components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./components/ui/select";
+import type { PdfScaleValue } from "./react-pdf-highlighter-extended";
 
 interface ToolbarProps {
-  setPdfScaleValue: (value: number) => void;
+  setPdfScaleValue: (value: PdfScaleValue) => void;
   toggleHighlightPen: () => void;
 }
 
@@ -56,6 +64,24 @@ const Toolbar = ({ setPdfScaleValue, toggleHighlightPen }: ToolbarProps) => {
     }
   };
 
+  const zoomByOption = (value: PdfScaleValue | string) => {
+    if (
+      value === "page-width" ||
+      value === "page-fit" ||
+      value === "page-actual" ||
+      value === "page-height" ||
+      value === "auto"
+    ) {
+      setPdfScaleValue(value);
+      setZoom(null);
+    } else if (typeof value === "string") {
+      const zoomNum = parseFloat(value);
+      if (!isNaN(zoomNum)) {
+        setPdfScaleValue(zoomNum / 100);
+        setZoom(zoomNum / 100);
+      }
+    }
+  };
   return (
     // <div className="Toolbar">
     //   <div className="ZoomControls">
@@ -100,35 +126,38 @@ const Toolbar = ({ setPdfScaleValue, toggleHighlightPen }: ToolbarProps) => {
         {/* Center section */}
 
         <div className="flex items-center space-x-1 text-sm h-5">
-          <div className="rounded-xs hover:bg-neutral-500 aspect-square p-1.5">
+          <Button
+            className="toolbar-button"
+            variant={"ghost"}
+            title="Zoom in"
+            onClick={zoomIn}
+          >
             <Plus className="size-4 aspect-square" />
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                className="toolbar-button"
-                aria-label="zoom"
-                variant="ghost"
-                asChild
-              >
-                <div>
-                  {100}%
-                  <ChevronDown className="h-3 w-3 opacity-50" />
-                </div>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="animate-none">
-              <DropdownMenuItem>Fit Page</DropdownMenuItem>
-              <DropdownMenuItem>Fit Width</DropdownMenuItem>
-              <DropdownMenuItem>100%</DropdownMenuItem>
-              <DropdownMenuItem>150%</DropdownMenuItem>
-              <DropdownMenuItem>200%</DropdownMenuItem>
-              <DropdownMenuItem>250%</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <div className="toolbar-button">
+          </Button>
+          <Select defaultValue="auto" onValueChange={zoomByOption}>
+            <SelectTrigger className="toolbar-button border-none focus:border-none w-fit ">
+              <SelectValue placeholder="auto" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="auto">Auto</SelectItem>
+              <SelectItem value="page-width">Page Width</SelectItem>
+              <SelectItem value="page-height">Page Height</SelectItem>
+              <SelectItem value="page-fit">Page Fit</SelectItem>
+              <SelectItem value="75">75%</SelectItem>
+              <SelectItem value="page-actual">100%</SelectItem>
+              <SelectItem value="150">150%</SelectItem>
+              <SelectItem value="200">200%</SelectItem>
+              <SelectItem value="250">250%</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button
+            className="toolbar-button"
+            variant={"ghost"}
+            title="Zoom out"
+            onClick={zoomOut}
+          >
             <Minus className="size-4" />
-          </div>
+          </Button>
 
           <Separator orientation="vertical" className="mx-3 bg-foreground " />
           <DropdownMenu>
