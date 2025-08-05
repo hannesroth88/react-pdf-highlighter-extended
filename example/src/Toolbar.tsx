@@ -1,9 +1,7 @@
 import { useState } from "react";
 import {
   ArrowDownToLine,
-  ChevronDown,
   EllipsisVertical,
-  Eraser,
   Highlighter,
   Maximize2,
   Menu,
@@ -13,12 +11,6 @@ import {
 } from "lucide-react";
 
 import "./style/Toolbar.css";
-import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./components/ui/dropdown-menu";
 import { Button } from "./components/ui/button";
 import { Separator } from "./components/ui/separator";
 import { Input } from "./components/ui/input";
@@ -83,27 +75,6 @@ const Toolbar = ({ setPdfScaleValue, toggleHighlightPen }: ToolbarProps) => {
     }
   };
   return (
-    // <div className="Toolbar">
-    //   <div className="ZoomControls">
-    //     <button title="Zoom in" onClick={zoomIn}>
-    //       +
-    //     </button>
-    //     <button title="Zoom out" onClick={zoomOut}>
-    //       -
-    //     </button>
-    //     {zoom ? `${(zoom * 100).toFixed(0)}%` : "Auto"}
-    //   </div>
-    //   <button
-    //     title="Highlight"
-    //     className={`HighlightButton ${isHighlightPen ? "active" : ""}`}
-    //     onClick={() => {
-    //       toggleHighlightPen();
-    //       setIsHighlightPen(!isHighlightPen);
-    //     }}
-    //   >
-    //     Toggle Highlights
-    //   </button>
-    // </div>
     <div className=" px-1 py-1 border-b bg-neutral-700 rounded-xs flex flex-row text-neutral-200">
       <div className="w-full flex items-center justify-between">
         {/* Left section */}
@@ -144,7 +115,7 @@ const Toolbar = ({ setPdfScaleValue, toggleHighlightPen }: ToolbarProps) => {
               <SelectItem value="page-height">Page Height</SelectItem>
               <SelectItem value="page-fit">Page Fit</SelectItem>
               <SelectItem value="75">75%</SelectItem>
-              <SelectItem value="page-actual">100%</SelectItem>
+              <SelectItem value="100">100%</SelectItem>
               <SelectItem value="150">150%</SelectItem>
               <SelectItem value="200">200%</SelectItem>
               <SelectItem value="250">250%</SelectItem>
@@ -160,31 +131,30 @@ const Toolbar = ({ setPdfScaleValue, toggleHighlightPen }: ToolbarProps) => {
           </Button>
 
           <Separator orientation="vertical" className="mx-3 bg-foreground " />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                className="toolbar-button"
-                aria-label="zoom"
-                variant="ghost"
-              >
-                <Highlighter className="size-4" />
-                Highlight
-                <ChevronDown className="h-3 w-3 opacity-50" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Fit Page</DropdownMenuItem>
-              <DropdownMenuItem>Fit Width</DropdownMenuItem>
-              <DropdownMenuItem>100%</DropdownMenuItem>
-              <DropdownMenuItem>150%</DropdownMenuItem>
-              <DropdownMenuItem>200%</DropdownMenuItem>
-              <DropdownMenuItem>250%</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button className="toolbar-button" aria-label="zoom" variant="ghost">
+          <Button
+            className={` toolbar-button font-normal HighlightButton ${
+              isHighlightPen ? "active" : ""
+            }`}
+            aria-label="zoom"
+            variant="ghost"
+            title="Highlight"
+            onClick={() => {
+              toggleHighlightPen();
+              setIsHighlightPen(!isHighlightPen);
+            }}
+          >
+            <Highlighter className="size-4" />
+            Highlight
+          </Button>
+          {/* Eraser for later  */}
+          {/* <Button
+            className="toolbar-button font-normal"
+            aria-label="zoom"
+            variant="ghost"
+          >
             <Eraser className="size-4" />
             Erase
-          </Button>
+          </Button> */}
         </div>
         {/* Right section */}
 
