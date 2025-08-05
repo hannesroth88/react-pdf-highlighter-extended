@@ -86,14 +86,14 @@ export const HighlightLayer = ({
         };
 
         const isScrolledTo = Boolean(
-          scrolledToHighlightId === viewportHighlight.id,
+          scrolledToHighlightId === viewportHighlight.id
         );
 
         const highlightUtils: HighlightContainerUtils = {
           highlight: viewportHighlight,
           viewportToScaled: (rect: LTWHP) => {
             const viewport = viewer.getPageView(
-              (rect.pageNumber || pageNumber) - 1, // Convert to 0 index
+              (rect.pageNumber || pageNumber) - 1 // Convert to 0 index
             ).viewport;
 
             return viewportToScaled(rect, viewport);

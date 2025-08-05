@@ -33,7 +33,7 @@
   "module": "./dist/esm/index.js",
   "scripts": {
     "start": "npm run dev",
-    "dev": "(cd ./example && vite --force)",
+    "dev": "(cd ./example && vite)",
     "build": "npm run clean && npm i && npm run build:esm && npm run build:copy-styles && npm run build:example && npm run build:docs",
     "build:esm": "tsc",
     "build:copy-styles": "cp -r ./src/style ./dist/esm",
@@ -48,7 +48,8 @@
   "dependencies": {
     "lodash.debounce": "^4.0.8",
     "pdfjs-dist": "5.3.31",
-    "react-rnd": "^10.5.2"
+    "react-rnd": "^10.5.2",
+    "vite": "^7.0.6"
   },
   "repository": {
     "type": "git",
