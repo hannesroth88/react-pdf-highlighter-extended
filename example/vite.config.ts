@@ -1,22 +1,14 @@
 import { defineConfig } from "vite";
-import reactRefresh from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react";
+import path from "path";
+import tailwindcss from "@tailwindcss/vite";
 
+// https://vite.dev/config/
 export default defineConfig({
-  base: "/react-pdf-highlighter-extended/example-app/",
-  build: {
-    target: "esnext",
-    outDir: "example-app",
-  },
-  plugins: [reactRefresh()],
-  server: {
-    port: 3000,
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      target: "esnext",
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
     },
-  },
-  define: {
-    APP_VERSION: JSON.stringify(process.env.npm_package_version),
   },
 });

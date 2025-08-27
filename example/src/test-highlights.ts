@@ -1,4 +1,4 @@
-import { CommentedHighlight } from "./types";
+import type { CommentedHighlight } from "./types";
 
 export const testHighlights: Record<string, Array<CommentedHighlight>> = {
   "https://arxiv.org/pdf/2203.11115": [

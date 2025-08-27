@@ -1,9 +1,8 @@
-import React from "react";
 import "./style/ContextMenu.css";
 
 export interface ContextMenuProps {
-  xPos: any;
-  yPos: any;
+  xPos: number;
+  yPos: number;
   editComment: () => void;
   deleteHighlight: () => void;
 }

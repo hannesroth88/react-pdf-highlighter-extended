@@ -1,9 +1,9 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import CommentForm from "./CommentForm";
 import {
-  GhostHighlight,
-  PdfSelection,
   usePdfHighlighterContext,
+  type GhostHighlight,
+  type PdfSelection,
 } from "./react-pdf-highlighter-extended";
 import "./style/ExpandableTip.css";
 
@@ -49,7 +49,7 @@ const ExpandableTip = ({ addHighlight }: ExpandableTipProps) => {
                 type: selectionRef.current!.type,
                 position: selectionRef.current!.position,
               },
-              input,
+              input
             );
 
             removeGhostHighlight();

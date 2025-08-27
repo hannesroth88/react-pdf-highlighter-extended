@@ -1,24 +1,24 @@
-import React, { MouseEvent } from "react";
+import { type MouseEvent } from "react";
 import HighlightPopup from "./HighlightPopup";
 import {
   AreaHighlight,
   MonitoredHighlightContainer,
   TextHighlight,
-  Tip,
-  ViewportHighlight,
   useHighlightContainerContext,
   usePdfHighlighterContext,
+  type Tip,
+  type ViewportHighlight,
 } from "./react-pdf-highlighter-extended";
-import { CommentedHighlight } from "./types";
+import type { CommentedHighlight } from "./types";
 
 interface HighlightContainerProps {
   editHighlight: (
     idToUpdate: string,
-    edit: Partial<CommentedHighlight>,
+    edit: Partial<CommentedHighlight>
   ) => void;
   onContextMenu?: (
     event: MouseEvent<HTMLDivElement>,
-    highlight: ViewportHighlight<CommentedHighlight>,
+    highlight: ViewportHighlight<CommentedHighlight>
   ) => void;
 }
 
@@ -36,39 +36,40 @@ const HighlightContainer = ({
 
   const { toggleEditInProgress } = usePdfHighlighterContext();
 
-  const component = highlight.type === "text" ? (
-    <TextHighlight
-      isScrolledTo={isScrolledTo}
-      highlight={highlight}
-      onContextMenu={(event) =>
-        onContextMenu && onContextMenu(event, highlight)
-      }
-    />
-  ) : (
-    <AreaHighlight
-      isScrolledTo={isScrolledTo}
-      highlight={highlight}
-      onChange={(boundingRect) => {
-        const edit = {
-          position: {
-            boundingRect: viewportToScaled(boundingRect),
-            rects: [],
-          },
-          content: {
-            image: screenshot(boundingRect),
-          },
-        };
+  const component =
+    highlight.type === "text" ? (
+      <TextHighlight
+        isScrolledTo={isScrolledTo}
+        highlight={highlight}
+        onContextMenu={(event) =>
+          onContextMenu && onContextMenu(event, highlight)
+        }
+      />
+    ) : (
+      <AreaHighlight
+        isScrolledTo={isScrolledTo}
+        highlight={highlight}
+        onChange={(boundingRect) => {
+          const edit = {
+            position: {
+              boundingRect: viewportToScaled(boundingRect),
+              rects: [],
+            },
+            content: {
+              image: screenshot(boundingRect),
+            },
+          };
 
-        editHighlight(highlight.id, edit);
-        toggleEditInProgress(false);
-      }}
-      bounds={highlightBindings.textLayer}
-      onContextMenu={(event) =>
-        onContextMenu && onContextMenu(event, highlight)
-      }
-      onEditStart={() => toggleEditInProgress(true)}
-    />
-  );
+          editHighlight(highlight.id, edit);
+          toggleEditInProgress(false);
+        }}
+        bounds={highlightBindings.textLayer}
+        onContextMenu={(event) =>
+          onContextMenu && onContextMenu(event, highlight)
+        }
+        onEditStart={() => toggleEditInProgress(true)}
+      />
+    );
 
   const highlightTip: Tip = {
     position: highlight.position,

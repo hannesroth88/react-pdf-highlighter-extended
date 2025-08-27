@@ -1,22 +1,28 @@
-import React, { MouseEvent, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+} from "react";
 import CommentForm from "./CommentForm";
-import ContextMenu, { ContextMenuProps } from "./ContextMenu";
+import ContextMenu, { type ContextMenuProps } from "./ContextMenu";
 import ExpandableTip from "./ExpandableTip";
 import HighlightContainer from "./HighlightContainer";
 import Sidebar from "./Sidebar";
 import Toolbar from "./Toolbar";
 import {
-  GhostHighlight,
-  Highlight,
   PdfHighlighter,
-  PdfHighlighterUtils,
   PdfLoader,
-  Tip,
-  ViewportHighlight,
+  type GhostHighlight,
+  type PdfHighlighterUtils,
+  type PdfScaleValue,
+  type Tip,
+  type ViewportHighlight,
 } from "./react-pdf-highlighter-extended";
 import "./style/App.css";
 import { testHighlights as _testHighlights } from "./test-highlights";
-import { CommentedHighlight } from "./types";
+import type { CommentedHighlight } from "./types";
 
 const TEST_HIGHLIGHTS = _testHighlights;
 const PRIMARY_PDF_URL = "https://arxiv.org/pdf/2203.11115";
@@ -35,17 +41,17 @@ const resetHash = () => {
 const App = () => {
   const [url, setUrl] = useState(PRIMARY_PDF_URL);
   const [highlights, setHighlights] = useState<Array<CommentedHighlight>>(
-    TEST_HIGHLIGHTS[PRIMARY_PDF_URL] ?? [],
+    TEST_HIGHLIGHTS[PRIMARY_PDF_URL] ?? []
   );
   const currentPdfIndexRef = useRef(0);
   const [contextMenu, setContextMenu] = useState<ContextMenuProps | null>(null);
-  const [pdfScaleValue, setPdfScaleValue] = useState<number | undefined>(
-    undefined,
+  const [pdfScaleValue, setPdfScaleValue] = useState<PdfScaleValue | undefined>(
+    undefined
   );
   const [highlightPen, setHighlightPen] = useState<boolean>(false);
 
   // Refs for PdfHighlighter utilities
-  const highlighterUtilsRef = useRef<PdfHighlighterUtils>();
+  const highlighterUtilsRef = useRef<PdfHighlighterUtils>(null);
 
   const toggleDocument = () => {
     const urls = [PRIMARY_PDF_URL, SECONDARY_PDF_URL];
@@ -71,7 +77,7 @@ const App = () => {
 
   const handleContextMenu = (
     event: MouseEvent<HTMLDivElement>,
-    highlight: ViewportHighlight<CommentedHighlight>,
+    highlight: ViewportHighlight<CommentedHighlight>
   ) => {
     event.preventDefault();
 
@@ -90,27 +96,27 @@ const App = () => {
 
   const deleteHighlight = (highlight: ViewportHighlight | Highlight) => {
     console.log("Deleting highlight", highlight);
-    setHighlights(highlights.filter((h) => h.id != highlight.id));
+    if ("id" in highlight) {
+      setHighlights(
+        highlights.filter((h) => "id" in h && h.id !== highlight.id)
+      );
+    }
   };
 
   const editHighlight = (
     idToUpdate: string,
-    edit: Partial<CommentedHighlight>,
+    edit: Partial<CommentedHighlight>
   ) => {
     console.log(`Editing highlight ${idToUpdate} with `, edit);
     setHighlights(
       highlights.map((highlight) =>
-        highlight.id === idToUpdate ? { ...highlight, ...edit } : highlight,
-      ),
+        highlight.id === idToUpdate ? { ...highlight, ...edit } : highlight
+      )
     );
   };
 
   const resetHighlights = () => {
     setHighlights([]);
-  };
-
-  const getHighlightById = (id: string) => {
-    return highlights.find((highlight) => highlight.id === id);
   };
 
   // Open comment tip and update highlight with new user input
@@ -135,23 +141,29 @@ const App = () => {
     highlighterUtilsRef.current.toggleEditInProgress(true);
   };
 
-  // Scroll to highlight based on hash in the URL
-  const scrollToHighlightFromHash = () => {
-    const highlight = getHighlightById(parseIdFromHash());
-
-    if (highlight && highlighterUtilsRef.current) {
-      highlighterUtilsRef.current.scrollToHighlight(highlight);
-    }
-  };
+  const getHighlightById = useCallback(
+    (id: string) => {
+      return highlights.find((highlight) => highlight.id === id);
+    },
+    [highlights]
+  );
 
   // Hash listeners for autoscrolling to highlights
   useEffect(() => {
+    const scrollToHighlightFromHash = () => {
+      const highlight = getHighlightById(parseIdFromHash());
+
+      if (highlight && highlighterUtilsRef.current) {
+        highlighterUtilsRef.current.scrollToHighlight(highlight);
+      }
+    };
+
     window.addEventListener("hashchange", scrollToHighlightFromHash);
 
     return () => {
       window.removeEventListener("hashchange", scrollToHighlightFromHash);
     };
-  }, [scrollToHighlightFromHash]);
+  }, [getHighlightById]);
 
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>
@@ -169,7 +181,10 @@ const App = () => {
           flexGrow: 1,
         }}
       >
-        <Toolbar setPdfScaleValue={(value) => setPdfScaleValue(value)} toggleHighlightPen={() => setHighlightPen(!highlightPen)} />
+        <Toolbar
+          setPdfScaleValue={(value) => setPdfScaleValue(value)}
+          toggleHighlightPen={() => setHighlightPen(!highlightPen)}
+        />
         <PdfLoader document={url}>
           {(pdfDocument) => (
             <PdfHighlighter
@@ -180,9 +195,20 @@ const App = () => {
                 highlighterUtilsRef.current = _pdfHighlighterUtils;
               }}
               pdfScaleValue={pdfScaleValue}
-              textSelectionColor={highlightPen ? "rgba(255, 226, 143, 1)" : undefined}
-              onSelection={highlightPen ? (selection) => addHighlight(selection.makeGhostHighlight(), "") : undefined}
-              selectionTip={highlightPen ? undefined : <ExpandableTip addHighlight={addHighlight} />}
+              textSelectionColor={
+                highlightPen ? "rgba(255, 226, 143, 1)" : undefined
+              }
+              onSelection={
+                highlightPen
+                  ? (selection) =>
+                      addHighlight(selection.makeGhostHighlight(), "")
+                  : undefined
+              }
+              selectionTip={
+                highlightPen ? undefined : (
+                  <ExpandableTip addHighlight={addHighlight} />
+                )
+              }
               highlights={highlights}
               style={{
                 height: "calc(100% - 41px)",
