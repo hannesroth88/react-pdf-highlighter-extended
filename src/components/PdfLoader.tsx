@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 import {
   GlobalWorkerOptions,
@@ -25,11 +25,6 @@ const DEFAULT_ERROR_MESSAGE = (error: Error) => (
 const DEFAULT_ON_ERROR = (error: Error) => {
   throw new Error(`Error loading PDF document: ${error.message}!`);
 };
-
-const DEFAULT_WORKER_SRC = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
-).toString();
 
 /**
  * The props type for {@link PdfLoader}.
@@ -79,6 +74,7 @@ export interface PdfLoaderProps {
   /**
    * NOTE: This will be applied to all PdfLoader instances.
    * If you want to only apply a source to this instance, use the document parameters.
+   * If not provided and no global worker is configured, a default worker will be set.
    */
   workerSrc?: string;
 }
@@ -94,7 +90,7 @@ export const PdfLoader = ({
   errorMessage = DEFAULT_ERROR_MESSAGE,
   children,
   onError = DEFAULT_ON_ERROR,
-  workerSrc = DEFAULT_WORKER_SRC,
+  workerSrc,
 }: PdfLoaderProps) => {
   const pdfLoadingTaskRef = useRef<PDFDocumentLoadingTask | null>(null);
   const pdfDocumentRef = useRef<PDFDocumentProxy | null>(null);
@@ -105,7 +101,17 @@ export const PdfLoader = ({
 
   // Intitialise document
   useEffect(() => {
-    GlobalWorkerOptions.workerSrc = workerSrc;
+    // Only set worker source if explicitly provided or if no global worker is configured
+    if (workerSrc) {
+      GlobalWorkerOptions.workerSrc = workerSrc;
+    } else if (!GlobalWorkerOptions.workerSrc) {
+      // Fallback worker source only if none is configured globally
+      GlobalWorkerOptions.workerSrc = new URL(
+        "pdfjs-dist/build/pdf.worker.min.mjs",
+        import.meta.url
+      ).toString();
+    }
+    
     pdfLoadingTaskRef.current = getDocument(document);
     pdfLoadingTaskRef.current.onProgress = (progress: OnProgressParameters) => {
       setLoadingProgress(progress.loaded > progress.total ? null : progress);
@@ -134,7 +140,7 @@ export const PdfLoader = ({
         pdfDocumentRef.current.destroy();
       }
     };
-  }, [document]);
+  }, [document, workerSrc]);
 
   return error
     ? errorMessage(error)

@@ -1,4 +1,4 @@
-import React, { CSSProperties, MouseEvent } from "react";
+import { CSSProperties, MouseEvent } from "react";
 
 import { getPageFromElement } from "../lib/pdfjs-dom";
 

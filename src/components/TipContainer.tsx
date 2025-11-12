@@ -1,5 +1,5 @@
 import { PDFViewer } from "pdfjs-dist/types/web/pdf_viewer";
-import React, {
+import {
   MutableRefObject,
   useLayoutEffect,
   useRef,

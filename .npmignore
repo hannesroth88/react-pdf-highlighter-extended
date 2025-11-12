@@ -1,0 +1,13 @@
+src/
+example/
+public/
+.github/
+*.md
+!README.md
+tsconfig.json
+.prettierrc
+.prettierignore
+.gitignore
+node_modules/
+*.log
+*.tgz

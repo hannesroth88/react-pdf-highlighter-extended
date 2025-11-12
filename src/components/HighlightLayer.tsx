@@ -1,5 +1,5 @@
 import { PDFViewer } from "pdfjs-dist/types/web/pdf_viewer";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import {
   HighlightContainerUtils,
   HighlightContext,

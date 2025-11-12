@@ -1,7 +1,7 @@
 {
   "name": "react-pdf-highlighter-extended",
   "type": "module",
-  "version": "8.1.0",
+  "version": "0.0.1",
   "description": "Set of modern React components for PDF highlighting",
   "author": "Daniel Arnould <daniel.s.arnould@gmail.com>",
   "license": "MIT",
@@ -30,26 +30,29 @@
     "dist"
   ],
   "types": "./dist/esm/index.d.ts",
+  "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
   "scripts": {
     "start": "npm run dev",
     "dev": "(cd ./example && vite)",
-    "build": "npm run clean && npm i && npm run build:esm && npm run build:copy-styles && npm run build:example && npm run build:docs",
+    "build": "npm run clean && npm install && npm run build:esm && npm run build:copy-styles && npm run build:example && npm run build:docs",
+    "build:lib": "npm run build:esm && npm run build:copy-styles",
     "build:esm": "tsc",
     "build:copy-styles": "cp -r ./src/style ./dist/esm",
     "build:example": "(cd ./example && tsc && vite build && mkdir \"../public/\" && cp -r example-app ../public/)",
     "build:docs": "npx typedoc",
-    "clean": "rm -rf dist public node_modules package-lock.json"
+    "clean": "rm -rf dist public node_modules package-lock.json",
+    "prepare": "npm run build:lib",
+    "prepublishOnly": "npm run build:lib"
   },
   "peerDependencies": {
     "react": "^18.3.1 || ^19.0.0",
-    "react-dom": "^18.3.1 || ^19.0.0"
+    "react-dom": "^18.3.1 || ^19.0.0",
+    "pdfjs-dist": "^5.3.31"
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",
-    "pdfjs-dist": "5.3.31",
-    "react-rnd": "^10.5.2",
-    "vite": "^7.0.6"
+    "react-rnd": "^10.5.2"
   },
   "repository": {
     "type": "git",
@@ -63,8 +66,11 @@
     "@types/node": "^24.2.0",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
-    "typedoc": "latest",
-    "typedoc-theme-category-nav": "latest",
-    "typescript": "^5.9.2"
+    "pdfjs-dist": "5.3.93",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typedoc": "^0.25.13",
+    "typedoc-theme-category-nav": "^0.0.3",
+    "typescript": "^5.4.5"
   }
 }
