@@ -1,11 +1,15 @@
 {
-  "name": "react-pdf-highlighter-extended",
+  "name": "@hannesroth88/react-pdf-highlighter-extended",
   "type": "module",
   "version": "0.0.1",
-  "description": "Set of modern React components for PDF highlighting",
-  "author": "Daniel Arnould <daniel.s.arnould@gmail.com>",
+  "description": "Set of modern React components for PDF highlighting (fork with enhancements)",
+  "author": "Hannes Roth <hannesroth88@protonmail.com>",
   "license": "MIT",
   "contributors": [
+    {
+      "name": "Hannes Roth",
+      "email": "hannesroth88@protonmail.com"
+    },
     {
       "name": "Daniel Arnould",
       "email": "daniel.s.arnould@gmail.com"
@@ -56,10 +60,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DanielArnould/react-pdf-highlighter.git"
+    "url": "git+https://github.com/hannesroth88/react-pdf-highlighter-extended.git"
   },
   "bugs": {
-    "url": "https://github.com/DanielArnould/react-pdf-highlighter-extended/issues"
+    "url": "https://github.com/hannesroth88/react-pdf-highlighter-extended/issues"
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.9",
