@@ -33,6 +33,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "types": "./dist/esm/index.d.ts",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
